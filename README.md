@@ -1,6 +1,6 @@
 Pizzeria project  
-Authors:
-Alexsandr Havrulenko
-Tarasenko Stanislav
-Vladyslav Mochoniy
-Nikolay Ignatenko
+Authors:  
+Alexsandr Havrulenko  
+Tarasenko Stanislav  
+Vladyslav Mochoniy  
+Nikolay Ignatenko  

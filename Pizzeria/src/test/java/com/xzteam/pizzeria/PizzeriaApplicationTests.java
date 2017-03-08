@@ -19,9 +19,9 @@ public class PizzeriaApplicationTests {
 
     @Test
     public void simpleTest() {
-        Dish dish = dishRepository.findOne(777L);
-        Assert.assertEquals(dish.getType(), DishType.DRINK);
-        Assert.assertEquals(dish.getPrice(), 10f, 0.1f);
+        Dish dish = dishRepository.findOne(1L);
+        Assert.assertEquals(dish.getType(), DishType.PIZZA);
+        Assert.assertEquals(dish.getPrice(), 45f, 0.1f);
     }
 
     @Test(expected = NullPointerException.class)

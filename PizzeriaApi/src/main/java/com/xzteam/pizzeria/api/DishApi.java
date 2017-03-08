@@ -6,17 +6,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class DishApi {
 	@XmlElement(required=false)
-    private Long id;
+    public Long id;
 	@XmlElement(required=true)
-    private String name;
+    public String name;
 	@XmlElement(required=true)
-    private String description;
+    public String description;
 	@XmlElement(required=true)
-    private String type;
+    public String type;
 	@XmlElement(required=true)
-    private Float price;
+    public Float price;
 	@XmlElement(required=true)
-    private Integer weight;
+    public Integer weight;
 	@XmlElement(required=true)
-    private String imageUrl;
+    public String imageUrl;
 }

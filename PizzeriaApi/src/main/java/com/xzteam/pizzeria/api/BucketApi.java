@@ -7,7 +7,4 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class BucketApi {
 	@XmlElement(required = false)
 	private Long id;
-	@XmlElement(required = true)
-	private 
-	
 }

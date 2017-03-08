@@ -9,5 +9,5 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class IngredientsListReply extends GenericReply{
 	@XmlElement(required=true)
-    public List <PizzaIngredients> puzzaIngredients = new ArrayList<>();
+    public List <PizzaIngredients> pizzaIngredients = new ArrayList<>();
 } 

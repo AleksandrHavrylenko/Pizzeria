@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface BucketRepository extends CrudRepository<Bucket, Long> {
-    public List<Bucket> findAllBucketByClient(Client client);
-    public List<Bucket> findAll();
+    List<Bucket> findAllBucketByClient(Client client);
+    List<Bucket> findAll();
 }

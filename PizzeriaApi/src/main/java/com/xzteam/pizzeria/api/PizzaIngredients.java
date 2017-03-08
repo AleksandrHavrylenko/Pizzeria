@@ -4,19 +4,15 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class DishApi {
+public class PizzaIngredients {
 	@XmlElement(required=false)
-    private Long id;
+	public Long ingredientId;
 	@XmlElement(required=true)
-    private String name;
+	public String name;	
 	@XmlElement(required=true)
-    private String description;
+	public Float price;
 	@XmlElement(required=true)
-    private String type;
+	public String imageUrl;
 	@XmlElement(required=true)
-    private Float price;
-	@XmlElement(required=true)
-    private Integer weight;
-	@XmlElement(required=true)
-    private String imageUrl;
+	public Integer weight;
 }

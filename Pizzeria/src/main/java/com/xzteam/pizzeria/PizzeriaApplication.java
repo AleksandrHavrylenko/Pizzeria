@@ -16,9 +16,9 @@ public class PizzeriaApplication {
         SpringApplication.run(PizzeriaApplication.class, args);
     }
 
-    @PostConstruct
-    private void init() {
-        mainController.showAllDishes();
-        mainController.showTests();
-    }
+//    @PostConstruct
+//    private void init() {
+//        mainController.showAllDishes();
+//        mainController.showTests();
+//    }
 }

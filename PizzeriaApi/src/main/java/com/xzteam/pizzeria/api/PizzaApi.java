@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class PizzaApi {
 	@XmlElement(required=false)
-    private Long pizzaId;
+	public Long pizzaId;
 	@XmlElement(required=true)
-    private String name;	
+	public String name;	
 }

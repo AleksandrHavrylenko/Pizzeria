@@ -1,18 +1,23 @@
 package com.xzteam.pizzeria.api;
 
-import java.util.Calendar;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class BucketApi {
+public class ClientApi {
 	@XmlElement(required = false)
 	public Long id;
 	@XmlElement(required = true)
-	public String address;
+	public String email;
 	@XmlElement(required = true)
-	public Float price;
+	public String passHash;
 	@XmlElement(required = true)
-	public Calendar date;
+	public String firstName;
+	@XmlElement(required = true)
+	public String lastName;
+	@XmlElement(required = true)
+	public String phone;
+	@XmlElement(required = true)
+	public Float spentMoney;
+
 }

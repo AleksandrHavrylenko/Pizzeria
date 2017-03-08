@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class PizzaIngredients {
+public class Ingredients {
 	@XmlElement(required=false)
 	public Long ingredientId;
 	@XmlElement(required=true)

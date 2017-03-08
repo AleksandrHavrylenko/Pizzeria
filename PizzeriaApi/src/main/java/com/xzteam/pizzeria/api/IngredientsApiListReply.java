@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement
-public class IngredientsListReply extends GenericReply{
+public class IngredientsApiListReply extends GenericReply{
 	@XmlElement(required=true)
-    public List <PizzaIngredients> pizzaIngredients = new ArrayList<>();
+    public List <IngredientsApi> ingredients = new ArrayList<>();
 } 

@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 public class DishMapper {
 
     public DishApi toApi(Dish d) {
-        DishApi da = null;
+        DishApi api = null;
         if (d != null) {
-            da = new DishApi();
-            da.id = d.getId();
-            da.name = d.getName();
-            da.description = d.getDescription();
-            da.price = d.getPrice();
-            da.weight = d.getWeight();
-            da.type = d.getType().toString();
-            da.imageUrl = d.getImageUrl();
+            api = new DishApi();
+            api.id = d.getId();
+            api.name = d.getName();
+            api.description = d.getDescription();
+            api.price = d.getPrice();
+            api.weight = d.getWeight();
+            api.type = d.getType().toString();
+            api.imageUrl = d.getImageUrl();
         }
-        return da;
+        return api;
     }
 }

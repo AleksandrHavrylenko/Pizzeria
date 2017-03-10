@@ -1,15 +1,14 @@
 package com.xzteam.pizzeria.rest;
 
+import com.xzteam.pizzeria.api.DishApiListReply;
 import com.xzteam.pizzeria.api.GenericReply;
+import com.xzteam.pizzeria.api.IngredientsApi;
 import com.xzteam.pizzeria.api.IngredientsApiListReply;
 import com.xzteam.pizzeria.mappers.IngredientMapper;
 import com.xzteam.pizzeria.services.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 public class IngredientController {
 
-    private static final Logger logger = Logger.getLogger(IngredientController.class.getName());
+    private static final Logger log = Logger.getLogger(IngredientController.class.getName());
 
     @Autowired
     IngredientService ingredientService;
@@ -41,11 +40,30 @@ public class IngredientController {
         return reply;
     }
 
+    @RequestMapping(path = "/ingredients/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public GenericReply addIngredient(@RequestBody IngredientsApi req) {
+        GenericReply rep = new DishApiListReply();
+        try {
+            //TODO: Write IngredientMapper class and use this line
+            //ingredientService.addIngredient(ingredientMapper.fromApi(req));
+        } catch (Exception e) {
+            rep.code = -1;
+            rep.message = e.getMessage();
+        }
+        return rep;
+    }
+
     @RequestMapping(path = "/ingredients/del/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public GenericReply delDish(@PathVariable Long id) {
+    public GenericReply delIngredient(@PathVariable Long id) {
         GenericReply rep = new GenericReply();
-        rep.retcode = -1;
-        rep.error_message = "Not implemented!";
+        try {
+            ingredientService.deleteIngredient(id);
+        } catch (Exception e) {
+            String msg = "Error deleting ingredient: " + e.getMessage();
+            rep.code = -1;
+            rep.message = msg;
+            log.warning(msg);
+        }
         return rep;
     }
 }

@@ -1,24 +1,38 @@
 package com.xzteam.pizzeria.services;
 
-import java.util.List;
+import com.xzteam.pizzeria.domain.Ingredient;
+import com.xzteam.pizzeria.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.xzteam.pizzeria.domain.Dish;
-import com.xzteam.pizzeria.domain.Ingredient;
-import com.xzteam.pizzeria.repository.IngredientRepository;
+import java.util.List;
+import java.util.logging.Logger;
 
 @Service
 public class IngredientService {
-	@Autowired 
-	IngredientRepository ingredientRepository;
-	
-	public List<Ingredient> getAll(){
-		return ingredientRepository.findAll();
-	}
-	
-	public Ingredient getIngredientById(Long id){
-		Ingredient ingredient = ingredientRepository.findOne(id);
-		return ingredient;
-	}	
+    private static final Logger log = Logger.getLogger(BucketService.class.getName());
+    @Autowired
+    IngredientRepository ingredientRepository;
+
+    public List<Ingredient> getAll() {
+        return ingredientRepository.findAll();
+    }
+
+    public Ingredient getIngredientById(Long id) {
+        return ingredientRepository.findOne(id);
+    }
+
+    public Ingredient addIngredient(Ingredient ingredient) {
+        log.info(String.format("Adding ingredient %s with id %s", ingredient.getName(), ingredient.getId()));
+        return ingredientRepository.save(ingredient);
+    }
+
+    public void deleteIngredient(Long id) {
+        Ingredient ingredient = ingredientRepository.findOne(id);
+        if (ingredient != null) {
+            log.info(String.format("Deleting ingredient %s with id %s",
+                    ingredient.getName(), ingredient.getId()));
+            ingredientRepository.delete(ingredient);
+        }
+    }
 }

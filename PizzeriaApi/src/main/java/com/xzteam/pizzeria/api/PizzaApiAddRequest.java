@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement
-public class PizzaApiListReply extends GenericReply {
+public class PizzaApiAddRequest extends PizzaApi {
     @XmlElement(required = true)
-    public List<PizzaApiInfo> pizzas = new ArrayList<>();
+    public List<Long> ingredientsIds = new ArrayList<>();
 }

@@ -11,7 +11,7 @@ public class Pizza implements Serializable {
 
     @Id
     @Column(name = "pizza_id")
-    private Long pizzaId;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -28,12 +28,12 @@ public class Pizza implements Serializable {
     public Pizza() {
     }
 
-    public Long getPizzaId() {
-        return pizzaId;
+    public Long getId() {
+        return id;
     }
 
-    public void setPizzaId(Long pizzaId) {
-        this.pizzaId = pizzaId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -63,7 +63,7 @@ public class Pizza implements Serializable {
     @Override
     public String toString() {
         return "Pizza{" +
-                "pizzaId=" + pizzaId +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 '}';
     }

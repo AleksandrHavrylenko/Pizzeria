@@ -11,7 +11,7 @@ public class Ingredient implements Serializable {
 
     @Id
     @Column(name = "ingredient_id")
-    private Long ingredientId;
+    private Long id;
 
     @Column(name = "name", length = 50)
     private String name;
@@ -31,12 +31,12 @@ public class Ingredient implements Serializable {
     public Ingredient() {
     }
 
-    public Long getIngredientId() {
-        return ingredientId;
+    public Long getId() {
+        return id;
     }
 
-    public void setIngredientId(Long ingredientId) {
-        this.ingredientId = ingredientId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -82,7 +82,7 @@ public class Ingredient implements Serializable {
     @Override
     public String toString() {
         return "Ingredient{" +
-                "ingredientId=" + ingredientId +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", weight=" + weight +

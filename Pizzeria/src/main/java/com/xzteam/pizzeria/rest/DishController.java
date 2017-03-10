@@ -1,15 +1,14 @@
 package com.xzteam.pizzeria.rest;
 
+import com.xzteam.pizzeria.api.DishApi;
 import com.xzteam.pizzeria.api.DishApiListReply;
 import com.xzteam.pizzeria.api.GenericReply;
+import com.xzteam.pizzeria.domain.Dish;
 import com.xzteam.pizzeria.mappers.DishMapper;
 import com.xzteam.pizzeria.services.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 public class DishController {
 
-    private static final Logger logger = Logger.getLogger(DishController.class.getName());
+    private static final Logger log = Logger.getLogger(DishController.class.getName());
 
     @Autowired
     DishService dishService;
@@ -34,23 +33,40 @@ public class DishController {
         return dishApiReply;
     }
 
-    @RequestMapping(path="/dishes/byid/{id}",  method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public DishApiListReply getDishById(@PathVariable Long id ){
+    @RequestMapping(path = "/dishes/byid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public DishApiListReply getDishById(@PathVariable Long id) {
         DishApiListReply reply = new DishApiListReply();
         reply.dishApi.add(dishMapper.toApi(dishService.getDishById(id)));
         return reply;
     }
 
-    @RequestMapping(path="/dishes/del/{id}",  method=RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public GenericReply delDish(@PathVariable Long id ){
+    @RequestMapping(path = "/dishes/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public GenericReply addDish(@RequestBody DishApi req) {
         GenericReply rep = new GenericReply();
-        try{
-            dishService.deleteDish(id);
-        }catch(Exception e){
-            rep.retcode = -1;
-            rep.error_message = e.getMessage();
-            logger.warning("Error deleting dish: "+e.getMessage());
+        try {
+            Dish dish = dishService.addDish(dishMapper.fromApi(req));
+            rep.message = dish.getId().toString();
+        } catch (Exception e) {
+            String msg = "Error adding dish: " + e.getMessage();
+            rep.code = -1;
+            rep.message = msg;
+            log.warning(msg);
         }
         return rep;
     }
+
+    @RequestMapping(path = "/dishes/del/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public GenericReply delDish(@PathVariable Long id) {
+        GenericReply rep = new GenericReply();
+        try {
+            dishService.deleteDish(id);
+        } catch (Exception e) {
+            String msg = "Error deleting dish: " + e.getMessage();
+            rep.code = -1;
+            rep.message = msg;
+            log.warning(msg);
+        }
+        return rep;
+    }
+
 }

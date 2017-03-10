@@ -1,0 +1,71 @@
+package com.xzteam.pizzeria.mappers;
+
+import com.xzteam.pizzeria.api.IngredientsApiListReply;
+import com.xzteam.pizzeria.api.PizzaApiAddRequest;
+import com.xzteam.pizzeria.api.PizzaApiInfo;
+import com.xzteam.pizzeria.domain.Ingredient;
+import com.xzteam.pizzeria.domain.Pizza;
+import com.xzteam.pizzeria.repository.IngredientRepository;
+import com.xzteam.pizzeria.repository.PizzaRepository;
+import com.xzteam.pizzeria.utils.EntityIdGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Component
+public class PizzaMapper {
+
+    @Autowired
+    PizzaRepository pizzaRepository;
+    @Autowired
+    IngredientRepository ingredientRepository;
+    @Autowired
+    IngredientMapper ingredientMapper;
+
+    public PizzaApiInfo toApi(Pizza p) {
+        PizzaApiInfo api = null;
+        if (p != null) {
+            api = new PizzaApiInfo();
+            api.pizzaId = p.getId();
+            api.name = p.getName();
+            IngredientsApiListReply listReply = new IngredientsApiListReply();
+            listReply.ingredients.addAll(ingredientRepository
+                    .findAllIngredientsByPizzas(p)
+                    .stream()
+                    .map(i -> ingredientMapper.toApi(i))
+                    .collect(Collectors.toList()));
+            api.ingredients = listReply.ingredients;
+        }
+        return api;
+    }
+
+    private Pizza newPizza() {
+        Pizza au = new Pizza();
+        boolean idOK = false;
+        Long id = 0L;
+        while (!idOK) {
+            id = EntityIdGenerator.random();
+            idOK = !pizzaRepository.exists(id);
+        }
+        au.setId(id);
+        return au;
+    }
+
+    public Pizza fromApi(PizzaApiAddRequest api) {
+        Pizza pizza = null;
+        if (api.pizzaId != null) {
+            pizza = pizzaRepository.findOne(api.pizzaId);
+        }
+        if (pizza == null) {
+            pizza = newPizza();
+        }
+        pizza.setName(api.name);
+        List<Ingredient> ingredients = api.ingredientsIds.stream()
+                .map(id -> ingredientRepository.findOne(id))
+                .collect(Collectors.toList());
+        pizza.setIngredients(ingredients);
+        return pizza;
+    }
+}

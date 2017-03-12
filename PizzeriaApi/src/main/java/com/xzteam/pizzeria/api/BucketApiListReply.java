@@ -8,5 +8,5 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class BucketApiListReply extends GenericReply{
 	@XmlElement
-	public List<BucketApi> bucket = new ArrayList<>();
+	public List<BucketApi> allBucket = new ArrayList<>();
 }

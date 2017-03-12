@@ -40,7 +40,7 @@ public class DishControllerTest {
     public void getDishById() throws Exception {
         this.mockMvc.perform(get("/dishes/byid/1"))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("Балтика 3")));
+                .andExpect(content().string(containsString("ukranian_soup")));
     }
 
     @Test

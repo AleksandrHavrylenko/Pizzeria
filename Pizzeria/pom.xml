@@ -49,8 +49,7 @@
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>
             <artifactId>mariadb-java-client</artifactId>
-            <version>1.5.7</version>
-        </dependency>
+            </dependency><!--$NO-MVN-MAN-VER$-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

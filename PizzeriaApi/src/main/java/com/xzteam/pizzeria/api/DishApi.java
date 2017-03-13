@@ -5,9 +5,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class DishApi {
-	@XmlElement(required=false)
-    public Long id;
-	@XmlElement(required=true)
+    @XmlElement
+    public String id;
+    @XmlElement(required=true)
     public String name;
 	@XmlElement(required=true)
     public String description;

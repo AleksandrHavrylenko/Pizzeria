@@ -29,7 +29,7 @@ public class Dish {
     @Column(name = "weight")
     private Integer weight;
 
-    @Column(name = "image_url", length = 100)
+    @Column(name = "image_url")
     private String imageUrl;
 
     @OneToOne(mappedBy = "dish")

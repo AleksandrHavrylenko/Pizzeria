@@ -5,8 +5,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ItemApi {
-	@XmlElement(required = false)
-	public Long id;
+	@XmlElement
+	public String id;
 	@XmlElement(required = true)
 	public Float price;
 }

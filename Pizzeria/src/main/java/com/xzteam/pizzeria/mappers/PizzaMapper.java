@@ -28,7 +28,7 @@ public class PizzaMapper {
         PizzaApiInfo api = null;
         if (p != null) {
             api = new PizzaApiInfo();
-            api.pizzaId = p.getId();
+            api.id = p.getId().toString();
             api.name = p.getName();
             IngredientsApiListReply listReply = new IngredientsApiListReply();
             listReply.ingredients.addAll(ingredientRepository
@@ -42,21 +42,21 @@ public class PizzaMapper {
     }
 
     private Pizza newPizza() {
-        Pizza au = new Pizza();
+        Pizza pizza = new Pizza();
         boolean idOK = false;
         Long id = 0L;
         while (!idOK) {
             id = EntityIdGenerator.random();
             idOK = !pizzaRepository.exists(id);
         }
-        au.setId(id);
-        return au;
+        pizza.setId(id);
+        return pizza;
     }
 
     public Pizza fromApi(PizzaApiAddRequest api) {
         Pizza pizza = null;
-        if (api.pizzaId != null) {
-            pizza = pizzaRepository.findOne(api.pizzaId);
+        if (api.id != null) {
+            pizza = pizzaRepository.findOne(Long.parseLong(api.id));
         }
         if (pizza == null) {
             pizza = newPizza();

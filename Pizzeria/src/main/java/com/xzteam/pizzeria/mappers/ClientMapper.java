@@ -1,14 +1,11 @@
 package com.xzteam.pizzeria.mappers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import com.xzteam.pizzeria.api.ClientApi;
-import com.xzteam.pizzeria.api.DishApi;
 import com.xzteam.pizzeria.domain.Client;
-import com.xzteam.pizzeria.domain.Dish;
-import com.xzteam.pizzeria.domain.enums.DishType;
 import com.xzteam.pizzeria.repository.ClientRepository;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ClientMapper {
@@ -19,8 +16,8 @@ public class ClientMapper {
     	ClientApi clientApi = null;
     	if(client != null) {
     		clientApi = new ClientApi();
-    		clientApi.id = client.getId();
-    		clientApi.email = client.getEmail();
+            clientApi.id = client.getId().toString();
+            clientApi.email = client.getEmail();
     		clientApi.passHash = client.getPassHash();
     		clientApi.firstName = client.getFirstName();
     		clientApi.lastName = client.getLastName();
@@ -31,21 +28,21 @@ public class ClientMapper {
     }
     
     private Client newClient() {
-        Client au = new Client();
+        Client client = new Client();
         boolean idOK = false;
         Long id = 0L;
         while (!idOK) {
             id = EntityIdGenerator.random();
             idOK = !clientRepository.exists(id);
         }
-        au.setId(id);
-        return au;
+        client.setId(id);
+        return client;
     }
 
     public Client fromApi(ClientApi api) {
         Client client = null;
         if (api.id != null) {
-            client = clientRepository.findOne(api.id);
+            client = clientRepository.findOne(Long.parseLong(api.id));
         }
         if (client == null) {
         	client = newClient();

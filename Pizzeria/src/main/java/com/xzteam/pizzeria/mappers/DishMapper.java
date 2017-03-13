@@ -21,7 +21,7 @@ public class DishMapper {
         DishApi api = null;
         if (d != null) {
             api = new DishApi();
-            api.id = d.getId();
+            api.id = d.getId().toString();
             api.name = d.getName();
             api.description = d.getDescription();
             api.price = d.getPrice();
@@ -33,21 +33,21 @@ public class DishMapper {
     }
 
     private Dish newDish() {
-        Dish au = new Dish();
+        Dish dish = new Dish();
         boolean idOK = false;
         Long id = 0L;
         while (!idOK) {
             id = EntityIdGenerator.random();
             idOK = !dishRepository.exists(id);
         }
-        au.setId(id);
-        return au;
+        dish.setId(id);
+        return dish;
     }
 
     public Dish fromApi(DishApi api) {
         Dish dish = null;
         if (api.id != null) {
-            dish = dishRepository.findOne(api.id);
+            dish = dishRepository.findOne(Long.parseLong(api.id));
         }
         if (dish == null) {
             dish = newDish();

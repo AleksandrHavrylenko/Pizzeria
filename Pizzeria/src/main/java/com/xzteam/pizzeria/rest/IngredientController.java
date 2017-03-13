@@ -44,7 +44,6 @@ public class IngredientController {
     public GenericReply addIngredient(@RequestBody IngredientsApi req) {
         GenericReply rep = new DishApiListReply();
         try {
-            //TODO: Write IngredientMapper class and use this line
             ingredientService.addIngredient(ingredientMapper.fromApi(req));
         } catch (Exception e) {
             rep.code = -1;

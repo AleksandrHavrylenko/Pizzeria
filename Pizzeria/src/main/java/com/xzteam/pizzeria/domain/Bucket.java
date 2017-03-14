@@ -23,6 +23,9 @@ public class Bucket {
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar date;
 
+    @Column(name = "status")
+    private Boolean status;
+
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
@@ -63,6 +66,14 @@ public class Bucket {
 
     public void setDate(Calendar date) {
         this.date = date;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public Client getClient() {

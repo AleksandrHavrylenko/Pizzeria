@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Calendar;
 
 @XmlRootElement
-public class BucketApi {
+public abstract class BucketApi {
 	@XmlElement
 	public String id;
 	@XmlElement(required = true)
@@ -14,4 +14,6 @@ public class BucketApi {
 	public Float price;
 	@XmlElement(required = true)
 	public Calendar date;
+	@XmlElement(required = true)
+	public Boolean status;
 }

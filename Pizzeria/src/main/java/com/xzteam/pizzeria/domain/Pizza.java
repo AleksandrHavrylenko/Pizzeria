@@ -16,6 +16,10 @@ public class Pizza implements Serializable {
     @Column(name = "name")
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private Client client;
+
     @OneToOne(mappedBy = "pizza")
     private Item item;
 
@@ -42,6 +46,14 @@ public class Pizza implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public Item getItem() {

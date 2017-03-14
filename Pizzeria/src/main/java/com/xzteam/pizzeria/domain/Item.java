@@ -14,6 +14,9 @@ public class Item {
     @Column(name = "price")
     private Float price;
 
+    @Column(name = "count")
+    private Integer count;
+
     @ManyToOne
     @JoinColumn(name = "bucket_id")
     private Bucket bucket;
@@ -43,6 +46,14 @@ public class Item {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public Bucket getBucket() {

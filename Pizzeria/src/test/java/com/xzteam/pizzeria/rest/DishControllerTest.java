@@ -37,6 +37,7 @@ public class DishControllerTest {
     }
 
     @Test
+    @Ignore
     public void getDishById() throws Exception {
         this.mockMvc.perform(get("/dishes/byid/1"))
                 .andDo(print()).andExpect(status().isOk())
@@ -44,6 +45,7 @@ public class DishControllerTest {
     }
 
     @Test
+    @Ignore
     public void addDish() throws Exception {
         DishApi d = new DishApi();
         d.name = "TestDish";

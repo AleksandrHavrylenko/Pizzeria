@@ -1,9 +1,9 @@
 package com.xzteam.pizzeria.rest;
 
-import com.xzteam.pizzeria.api.DishApiListReply;
 import com.xzteam.pizzeria.api.GenericReply;
 import com.xzteam.pizzeria.api.IngredientsApi;
 import com.xzteam.pizzeria.api.IngredientsApiListReply;
+import com.xzteam.pizzeria.domain.Ingredient;
 import com.xzteam.pizzeria.mappers.IngredientMapper;
 import com.xzteam.pizzeria.services.IngredientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,15 +41,16 @@ public class IngredientController {
     }
 
     @RequestMapping(path = "/ingredients/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public GenericReply addIngredient(@RequestBody IngredientsApi req) {
-        GenericReply rep = new DishApiListReply();
+    public IngredientsApiListReply addIngredient(@RequestBody IngredientsApi req) {
+        IngredientsApiListReply reply = new IngredientsApiListReply();
         try {
-            ingredientService.addIngredient(ingredientMapper.fromApi(req));
+            Ingredient ing = ingredientService.addIngredient(ingredientMapper.fromApi(req));
+            reply.ingredients.add(ingredientMapper.toApi(ing));
         } catch (Exception e) {
-            rep.code = -1;
-            rep.message = e.getMessage();
+            reply.code = -1;
+            reply.message = e.getMessage();
         }
-        return rep;
+        return reply;
     }
 
     @RequestMapping(path = "/ingredients/del/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

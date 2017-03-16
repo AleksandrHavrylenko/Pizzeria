@@ -20,8 +20,8 @@ public class Pizza implements Serializable {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToOne(mappedBy = "pizza")
-    private Item item;
+    @ManyToMany(mappedBy = "pizzas")
+    private List<Bucket> buckets;
 
     @ManyToMany
     @JoinTable(name = "pizza_ingredient",
@@ -54,14 +54,6 @@ public class Pizza implements Serializable {
 
     public void setClient(Client client) {
         this.client = client;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
     }
 
     public List<Ingredient> getIngredients() {

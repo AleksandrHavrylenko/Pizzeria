@@ -26,7 +26,7 @@ public class DishController {
     @RequestMapping(path = "/dishes/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public DishApiListReply getAllDishes() {
         DishApiListReply dishApiReply = new DishApiListReply();
-        dishApiReply.dishApi.addAll(dishService.getAll()
+        dishApiReply.dishes.addAll(dishService.getAll()
                 .stream()
                 .map(d -> dishMapper.toApi(d))
                 .collect(Collectors.toList()));
@@ -36,23 +36,23 @@ public class DishController {
     @RequestMapping(path = "/dishes/byid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public DishApiListReply getDishById(@PathVariable Long id) {
         DishApiListReply reply = new DishApiListReply();
-        reply.dishApi.add(dishMapper.toApi(dishService.getDishById(id)));
+        reply.dishes.add(dishMapper.toApi(dishService.getDishById(id)));
         return reply;
     }
 
     @RequestMapping(path = "/dishes/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public GenericReply addDish(@RequestBody DishApi req) {
-        GenericReply rep = new GenericReply();
+    public DishApiListReply addDish(@RequestBody DishApi req) {
+        DishApiListReply reply = new DishApiListReply();
         try {
             Dish dish = dishService.addDish(dishMapper.fromApi(req));
-            rep.message = dish.getId().toString();
+            reply.dishes.add(dishMapper.toApi(dish));
         } catch (Exception e) {
             String msg = "Error adding dish: " + e.getMessage();
-            rep.code = -1;
-            rep.message = msg;
+            reply.code = -1;
+            reply.message = msg;
             log.warning(msg);
         }
-        return rep;
+        return reply;
     }
 
     @RequestMapping(path = "/dishes/del/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

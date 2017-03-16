@@ -26,8 +26,8 @@ public class ClientController {
 			produces = org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ClientApiReply getAllClients() {
 		ClientApiReply clientApiReply = new ClientApiReply();
-		clientApiReply.clientApi.addAll(clientService.getAll()
-				.stream()
+        clientApiReply.clients.addAll(clientService.getAll()
+                .stream()
 				.map(client -> clientMapper.toApi(client))
 				.collect(Collectors.toList()));
 		return clientApiReply;
@@ -37,8 +37,8 @@ public class ClientController {
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ClientApiReply getClientById(@PathVariable Long id) {
 		ClientApiReply reply = new ClientApiReply();
-		reply.clientApi.add(clientMapper.toApi(clientService.getClientById(id)));
-		return reply;
+        reply.clients.add(clientMapper.toApi(clientService.getClientById(id)));
+        return reply;
 	}
 
 	@RequestMapping(path = "/clients/del/{id}", method = RequestMethod.DELETE,

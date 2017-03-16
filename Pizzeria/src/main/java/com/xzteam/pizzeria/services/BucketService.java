@@ -3,9 +3,11 @@ package com.xzteam.pizzeria.services;
 import com.xzteam.pizzeria.domain.Bucket;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.repository.BucketRepository;
+import com.xzteam.pizzeria.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -14,6 +16,8 @@ public class BucketService {
     private static final Logger log = Logger.getLogger(BucketService.class.getName());
     @Autowired
     BucketRepository bucketRepository;
+    @Autowired
+    ClientRepository clientRepository;
 
     public Bucket getBucketById(Long id) {
         return bucketRepository.findOne(id);
@@ -23,8 +27,9 @@ public class BucketService {
         return bucketRepository.findAll();
     }
 
-    public List<Bucket> getAllBucketsByClient(Client client) {
-        return bucketRepository.findAllBucketByClient(client);
+    public List<Bucket> getAllBucketsByClientId(Long id) {
+        Client client = clientRepository.findOne(id);
+        return client == null ? Collections.EMPTY_LIST : bucketRepository.findAllBucketByClient(client);
     }
 
     public Bucket addBucket(Bucket bucket) {

@@ -1,10 +1,13 @@
 package com.xzteam.pizzeria.services;
 
+import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.domain.Pizza;
+import com.xzteam.pizzeria.repository.ClientRepository;
 import com.xzteam.pizzeria.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,6 +16,8 @@ public class PizzaService {
     private static final Logger log = Logger.getLogger(PizzaService.class.getName());
     @Autowired
     PizzaRepository pizzaRepository;
+    @Autowired
+    ClientRepository clientRepository;
 
     public List<Pizza> getAll() {
         return pizzaRepository.findAll();
@@ -34,4 +39,10 @@ public class PizzaService {
             pizzaRepository.delete(pizza);
         }
     }
+
+    public List<Pizza> getPizzasByClientId(Long id) {
+        Client client = clientRepository.findOne(id);
+        return client == null ? Collections.EMPTY_LIST : pizzaRepository.findAllPizzasByClient(client);
+    }
+
 }

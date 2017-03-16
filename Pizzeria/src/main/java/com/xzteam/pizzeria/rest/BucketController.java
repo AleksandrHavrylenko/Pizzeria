@@ -1,6 +1,6 @@
 package com.xzteam.pizzeria.rest;
 
-import com.xzteam.pizzeria.api.BucketApi;
+import com.xzteam.pizzeria.api.BucketApiAddRequest;
 import com.xzteam.pizzeria.api.BucketApiListReply;
 import com.xzteam.pizzeria.api.GenericReply;
 import com.xzteam.pizzeria.domain.Bucket;
@@ -26,7 +26,7 @@ public class BucketController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BucketApiListReply getAllBuckets() {
         BucketApiListReply bucketList = new BucketApiListReply();
-        bucketList.allBucket.addAll(bucketService.getAll()
+        bucketList.buckets.addAll(bucketService.getAll()
                 .stream()
                 .map(bucket -> bucketMapper.toApi(bucket))
                 .collect(Collectors.toList()));
@@ -37,8 +37,19 @@ public class BucketController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BucketApiListReply getBucketById(@PathVariable Long id) {
         BucketApiListReply bucketById = new BucketApiListReply();
-        bucketById.allBucket.add(bucketMapper.toApi(bucketService.getBucketById(id)));
+        bucketById.buckets.add(bucketMapper.toApi(bucketService.getBucketById(id)));
         return bucketById;
+    }
+
+    @RequestMapping(path = "/buckets/byClientId/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public BucketApiListReply getBucketsByClientId(@PathVariable Long id) {
+        BucketApiListReply bucketList = new BucketApiListReply();
+        bucketList.buckets.addAll(bucketService.getAllBucketsByClientId(id)
+                .stream()
+                .map(bucket -> bucketMapper.toApi(bucket))
+                .collect(Collectors.toList()));
+        return bucketList;
     }
 
     @RequestMapping(path = "/buckets/del/{id}", method = RequestMethod.DELETE,
@@ -55,18 +66,34 @@ public class BucketController {
         return reply;
     }
 
+//    @RequestMapping(path = "/buckets/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    public GenericReply addBucket(@RequestBody BucketApi req) {
+//        GenericReply rep = new GenericReply();
+//        try {
+//            Bucket bucket = bucketService.addBucket(bucketMapper.fromApi(req));
+//            rep.message = bucket.getId().toString();
+//        } catch (Exception e) {
+//            String msg = "Error adding bucket: " + e.getMessage();
+//            rep.code = -1;
+//            rep.message = msg;
+//            log.warning(msg);
+//        }
+//        return rep;
+//    }
+
     @RequestMapping(path = "/buckets/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public GenericReply addBucket(@RequestBody BucketApi req) {
-        GenericReply rep = new GenericReply();
+    public BucketApiListReply addBucket(@RequestBody BucketApiAddRequest req) {
+        BucketApiListReply reply = new BucketApiListReply();
         try {
             Bucket bucket = bucketService.addBucket(bucketMapper.fromApi(req));
-            rep.message = bucket.getId().toString();
+            reply.buckets.add(bucketMapper.toApi(bucket));
         } catch (Exception e) {
             String msg = "Error adding bucket: " + e.getMessage();
-            rep.code = -1;
-            rep.message = msg;
+            reply.code = -1;
+            reply.message = msg;
             log.warning(msg);
-        }
-        return rep;
     }
+        return reply;
+    }
+
 }

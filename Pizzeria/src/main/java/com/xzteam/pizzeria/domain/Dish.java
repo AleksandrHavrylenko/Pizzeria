@@ -3,6 +3,7 @@ package com.xzteam.pizzeria.domain;
 import com.xzteam.pizzeria.domain.enums.DishType;
 
 import javax.persistence.*;
+import java.util.List;
 
 @SuppressWarnings("unused")
 @Entity
@@ -32,8 +33,8 @@ public class Dish {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @OneToOne(mappedBy = "dish")
-    private Item item;
+    @ManyToMany(mappedBy = "dishes")
+    private List<Bucket> buckets;
 
     public Dish() {
     }
@@ -94,14 +95,6 @@ public class Dish {
         this.imageUrl = imageUrl;
     }
 
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
     @Override
     public String toString() {
         return "Dish{" +
@@ -112,7 +105,6 @@ public class Dish {
                 ", price=" + price +
                 ", weight=" + weight +
                 ", imageUrl='" + imageUrl + '\'' +
-                ", item=" + item +
                 '}';
     }
 }

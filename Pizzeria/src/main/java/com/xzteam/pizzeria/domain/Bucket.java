@@ -30,8 +30,17 @@ public class Bucket {
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @OneToMany(mappedBy = "bucket", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Item> items;
+    @ManyToMany
+    @JoinTable(name = "bucket_dish",
+            joinColumns = @JoinColumn(name = "bucket_id"),
+            inverseJoinColumns = @JoinColumn(name = "dish_id"))
+    private List<Dish> dishes;
+
+    @ManyToMany
+    @JoinTable(name = "bucket_pizza",
+            joinColumns = @JoinColumn(name = "bucket_id"),
+            inverseJoinColumns = @JoinColumn(name = "pizza_id"))
+    private List<Pizza> pizzas;
 
     public Bucket() {
     }
@@ -84,12 +93,20 @@ public class Bucket {
         this.client = client;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public List<Dish> getDishes() {
+        return dishes;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setDishes(List<Dish> dishes) {
+        this.dishes = dishes;
+    }
+
+    public List<Pizza> getPizzas() {
+        return pizzas;
+    }
+
+    public void setPizzas(List<Pizza> pizzas) {
+        this.pizzas = pizzas;
     }
 
     @Override

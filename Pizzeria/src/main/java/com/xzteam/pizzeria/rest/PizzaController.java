@@ -34,25 +34,35 @@ public class PizzaController {
     }
 
     @RequestMapping(path = "/pizzas/byid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public PizzaApiListReply getDishById(@PathVariable Long id) {
+    public PizzaApiListReply getPizzaById(@PathVariable Long id) {
         PizzaApiListReply reply = new PizzaApiListReply();
         reply.pizzas.add(pizzaMapper.toApi(pizzaService.getPizzaById(id)));
         return reply;
     }
 
+    @RequestMapping(path = "/pizzas/byClientId/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public PizzaApiListReply getPizzasByClientId(@PathVariable Long id) {
+        PizzaApiListReply listReply = new PizzaApiListReply();
+        listReply.pizzas.addAll(pizzaService.getPizzasByClientId(id)
+                .stream()
+                .map(d -> pizzaMapper.toApi(d))
+                .collect(Collectors.toList()));
+        return listReply;
+    }
+
     @RequestMapping(path = "/pizzas/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public GenericReply addPizza(@RequestBody PizzaApiAddRequest req) {
-        GenericReply rep = new GenericReply();
+    public PizzaApiListReply addPizza(@RequestBody PizzaApiAddRequest req) {
+        PizzaApiListReply reply = new PizzaApiListReply();
         try {
             Pizza pizza = pizzaService.addPizza(pizzaMapper.fromApi(req));
-            rep.message = pizza.getId().toString();
+            reply.pizzas.add(pizzaMapper.toApi(pizza));
         } catch (Exception e) {
             String msg = "Error adding pizza: " + e.getMessage();
-            rep.code = -1;
-            rep.message = msg;
+            reply.code = -1;
+            reply.message = msg;
             log.warning(msg);
         }
-        return rep;
+        return reply;
     }
 
     @RequestMapping(path = "/pizzas/del/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

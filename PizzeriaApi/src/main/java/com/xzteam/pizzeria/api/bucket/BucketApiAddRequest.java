@@ -1,16 +1,13 @@
-package com.xzteam.pizzeria.api;
+package com.xzteam.pizzeria.api.bucket;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-@XmlRootElement
 public class BucketApiAddRequest extends BucketApi {
-    @XmlElement(required = true)
+
+    @NotNull
     public Long clientId;
-    @XmlElement
     public List<Long> dishesIds = new ArrayList<>();
-    @XmlElement
     public List<Long> pizzasIds = new ArrayList<>();
 }

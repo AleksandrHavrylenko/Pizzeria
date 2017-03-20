@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 @Service
 public class IngredientService {
-    private static final Logger log = Logger.getLogger(BucketService.class.getName());
+    private static final Logger log = Logger.getLogger(IngredientService.class.getName());
     @Autowired
     IngredientRepository ingredientRepository;
 

@@ -1,6 +1,6 @@
 package com.xzteam.pizzeria.mappers;
 
-import com.xzteam.pizzeria.api.ClientApi;
+import com.xzteam.pizzeria.api.client.ClientApi;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.repository.ClientRepository;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;

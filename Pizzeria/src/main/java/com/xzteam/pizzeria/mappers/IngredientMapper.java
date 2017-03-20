@@ -1,6 +1,6 @@
 package com.xzteam.pizzeria.mappers;
 
-import com.xzteam.pizzeria.api.IngredientsApi;
+import com.xzteam.pizzeria.api.ingredients.IngredientsApi;
 import com.xzteam.pizzeria.domain.Ingredient;
 import com.xzteam.pizzeria.repository.IngredientRepository;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;

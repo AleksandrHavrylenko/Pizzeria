@@ -1,23 +1,21 @@
 package com.xzteam.pizzeria.mappers;
 
-import com.xzteam.pizzeria.api.DishApi;
+import com.xzteam.pizzeria.api.dish.DishApi;
 import com.xzteam.pizzeria.domain.Dish;
 import com.xzteam.pizzeria.domain.enums.DishType;
-import com.xzteam.pizzeria.repository.DishRepository;
+import com.xzteam.pizzeria.rest.exceptions.NotFoundException;
+import com.xzteam.pizzeria.services.DishService;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * EXAMPLE MAPPER
- */
 @Component
 public class DishMapper {
 
     @Autowired
-    DishRepository dishRepository;
+    DishService dishService;
 
-    public DishApi toApi(Dish d) {
+    public DishApi toApiGet(Dish d) {
         DishApi api = null;
         if (d != null) {
             api = new DishApi();
@@ -38,26 +36,33 @@ public class DishMapper {
         Long id = 0L;
         while (!idOK) {
             id = EntityIdGenerator.random();
-            idOK = !dishRepository.exists(id);
+            idOK = !dishService.exists(id);
         }
         dish.setId(id);
         return dish;
     }
 
-    public Dish fromApi(DishApi api) {
-        Dish dish = null;
-        if (api.id != null) {
-            dish = dishRepository.findOne(Long.parseLong(api.id));
-        }
-        if (dish == null) {
-            dish = newDish();
-        }
+    private void updateFields(Dish dish, DishApi api) {
         dish.setName(api.name);
         dish.setDescription(api.description);
         dish.setPrice(api.price);
         dish.setWeight(api.weight);
         dish.setImageUrl(api.imageUrl);
         dish.setType(DishType.valueOf(api.type));
+    }
+
+    public Dish fromApiPost(DishApi api) {
+        Dish dish = newDish();
+        updateFields(dish, api);
+        return dish;
+    }
+
+    public Dish fromApiPut(DishApi api, long id) throws NotFoundException {
+        Dish dish = dishService.getDishById(id);
+        if (dish == null) {
+            throw new NotFoundException();
+        }
+        updateFields(dish, api);
         return dish;
     }
 }

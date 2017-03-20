@@ -1,8 +1,8 @@
 package com.xzteam.pizzeria.rest;
 
 import com.xzteam.pizzeria.api.GenericReply;
-import com.xzteam.pizzeria.api.IngredientsApi;
-import com.xzteam.pizzeria.api.IngredientsApiListReply;
+import com.xzteam.pizzeria.api.ingredients.IngredientsApi;
+import com.xzteam.pizzeria.api.ingredients.IngredientsApiListReply;
 import com.xzteam.pizzeria.domain.Ingredient;
 import com.xzteam.pizzeria.mappers.IngredientMapper;
 import com.xzteam.pizzeria.services.IngredientService;
@@ -23,7 +23,7 @@ public class IngredientController {
     @Autowired
     IngredientMapper ingredientMapper;
 
-    @RequestMapping(path = "/ingredients/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public IngredientsApiListReply getAllIngredients() {
         IngredientsApiListReply listReply = new IngredientsApiListReply();
         listReply.ingredients.addAll(ingredientService.getAll()
@@ -33,14 +33,14 @@ public class IngredientController {
         return listReply;
     }
 
-    @RequestMapping(path = "/ingredients/byid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public IngredientsApiListReply getIngredientById(@PathVariable Long id) {
         IngredientsApiListReply reply = new IngredientsApiListReply();
         reply.ingredients.add(ingredientMapper.toApi(ingredientService.getIngredientById(id)));
         return reply;
     }
 
-    @RequestMapping(path = "/ingredients/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public IngredientsApiListReply addIngredient(@RequestBody IngredientsApi req) {
         IngredientsApiListReply reply = new IngredientsApiListReply();
         try {
@@ -53,7 +53,7 @@ public class IngredientController {
         return reply;
     }
 
-    @RequestMapping(path = "/ingredients/del/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public GenericReply delIngredient(@PathVariable Long id) {
         GenericReply rep = new GenericReply();
         try {

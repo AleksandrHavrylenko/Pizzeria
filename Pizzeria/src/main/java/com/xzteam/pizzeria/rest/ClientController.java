@@ -1,8 +1,8 @@
 package com.xzteam.pizzeria.rest;
 
-import com.xzteam.pizzeria.api.ClientApi;
-import com.xzteam.pizzeria.api.ClientApiReply;
 import com.xzteam.pizzeria.api.GenericReply;
+import com.xzteam.pizzeria.api.client.ClientApi;
+import com.xzteam.pizzeria.api.client.ClientApiReply;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.mappers.ClientMapper;
 import com.xzteam.pizzeria.services.ClientService;
@@ -22,7 +22,7 @@ public class ClientController {
 	@Autowired
 	ClientMapper clientMapper;
 
-	@RequestMapping(path = "/clients/all", method = RequestMethod.GET,
+	@RequestMapping(path = "/clients", method = RequestMethod.GET,
 			produces = org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ClientApiReply getAllClients() {
 		ClientApiReply clientApiReply = new ClientApiReply();
@@ -33,7 +33,7 @@ public class ClientController {
 		return clientApiReply;
 	}
 
-	@RequestMapping(path = "/clients/byid/{id}", method = RequestMethod.GET,
+	@RequestMapping(path = "/clients/{id}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ClientApiReply getClientById(@PathVariable Long id) {
 		ClientApiReply reply = new ClientApiReply();
@@ -41,7 +41,7 @@ public class ClientController {
         return reply;
 	}
 
-	@RequestMapping(path = "/clients/del/{id}", method = RequestMethod.DELETE,
+	@RequestMapping(path = "/clients/{id}", method = RequestMethod.DELETE,
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public GenericReply delClient(@PathVariable Long id) {
 		GenericReply reply = new GenericReply();
@@ -55,7 +55,7 @@ public class ClientController {
 		return reply;
 	}
 
-	@RequestMapping(path = "/clients/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(path = "/clients", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public GenericReply addClient(@RequestBody ClientApi req) {
         GenericReply rep = new GenericReply();
         try {

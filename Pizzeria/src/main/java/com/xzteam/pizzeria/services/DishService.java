@@ -10,7 +10,8 @@ import java.util.logging.Logger;
 
 @Service
 public class DishService {
-    private static final Logger log = Logger.getLogger(BucketService.class.getName());
+    private static final Logger log = Logger.getLogger(DishService.class.getName());
+
     @Autowired
     DishRepository dishRepository;
 
@@ -27,12 +28,21 @@ public class DishService {
         return dishRepository.save(dish);
     }
 
+    public Dish updateDish(Dish dish) {
+        log.info(String.format("Updating dish %s with id %s", dish.getName(), dish.getId()));
+        return dishRepository.save(dish);
+    }
+
     public void deleteDish(Long id) {
         Dish dish = dishRepository.findOne(id);
         if (dish != null) {
             log.info(String.format("Deleting dish %s with id %s", dish.getName(), dish.getId()));
             dishRepository.delete(dish);
         }
+    }
+
+    public boolean exists(Long id) {
+        return dishRepository.exists(id);
     }
 
 }

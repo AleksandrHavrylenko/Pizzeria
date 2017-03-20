@@ -1,8 +1,8 @@
 package com.xzteam.pizzeria.rest;
 
 import com.xzteam.pizzeria.api.GenericReply;
-import com.xzteam.pizzeria.api.PizzaApiAddRequest;
-import com.xzteam.pizzeria.api.PizzaApiListReply;
+import com.xzteam.pizzeria.api.pizza.PizzaApiAddRequest;
+import com.xzteam.pizzeria.api.pizza.PizzaApiListReply;
 import com.xzteam.pizzeria.domain.Pizza;
 import com.xzteam.pizzeria.mappers.PizzaMapper;
 import com.xzteam.pizzeria.services.PizzaService;
@@ -23,7 +23,7 @@ public class PizzaController {
     @Autowired
     PizzaMapper pizzaMapper;
 
-    @RequestMapping(path = "/pizzas/all", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/pizzas", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public PizzaApiListReply getAllPizzas() {
         PizzaApiListReply listReply = new PizzaApiListReply();
         listReply.pizzas.addAll(pizzaService.getAll()
@@ -33,7 +33,7 @@ public class PizzaController {
         return listReply;
     }
 
-    @RequestMapping(path = "/pizzas/byid/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/pizzas/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public PizzaApiListReply getPizzaById(@PathVariable Long id) {
         PizzaApiListReply reply = new PizzaApiListReply();
         reply.pizzas.add(pizzaMapper.toApi(pizzaService.getPizzaById(id)));
@@ -50,7 +50,7 @@ public class PizzaController {
         return listReply;
     }
 
-    @RequestMapping(path = "/pizzas/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/pizzas", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public PizzaApiListReply addPizza(@RequestBody PizzaApiAddRequest req) {
         PizzaApiListReply reply = new PizzaApiListReply();
         try {
@@ -65,7 +65,7 @@ public class PizzaController {
         return reply;
     }
 
-    @RequestMapping(path = "/pizzas/del/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/pizzas/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public GenericReply delPizza(@PathVariable Long id) {
         GenericReply rep = new GenericReply();
         try {

@@ -14,20 +14,20 @@ public class Dish {
     @Column(name = "dish_id")
     private Long id;
 
-    @Column(name = "name", length = 50)
+    @Column(name = "name", length = 50, nullable = false)
     private String name;
 
-    @Column(name = "description", length = 250)
+    @Column(name = "description", nullable = false)
     private String description;
 
-    @Column(name = "type")
+    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.STRING)
     private DishType type;
 
-    @Column(name = "price")
+    @Column(name = "price", nullable = false)
     private Float price;
 
-    @Column(name = "weight")
+    @Column(name = "weight", nullable = false)
     private Integer weight;
 
     @Column(name = "image_url")

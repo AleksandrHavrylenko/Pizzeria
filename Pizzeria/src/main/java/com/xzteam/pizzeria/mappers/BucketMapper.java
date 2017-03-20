@@ -1,8 +1,8 @@
 package com.xzteam.pizzeria.mappers;
 
-import com.xzteam.pizzeria.api.BucketApi;
-import com.xzteam.pizzeria.api.BucketApiAddRequest;
-import com.xzteam.pizzeria.api.BucketApiInfo;
+import com.xzteam.pizzeria.api.bucket.BucketApi;
+import com.xzteam.pizzeria.api.bucket.BucketApiAddRequest;
+import com.xzteam.pizzeria.api.bucket.BucketApiInfo;
 import com.xzteam.pizzeria.domain.Bucket;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.domain.Dish;
@@ -11,6 +11,7 @@ import com.xzteam.pizzeria.repository.BucketRepository;
 import com.xzteam.pizzeria.repository.ClientRepository;
 import com.xzteam.pizzeria.repository.DishRepository;
 import com.xzteam.pizzeria.repository.PizzaRepository;
+import com.xzteam.pizzeria.rest.exceptions.BadRequestException;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -47,7 +48,7 @@ public class BucketMapper {
 
             bucketApi.dishes.addAll(dishRepository.findAllDishesByBuckets(bucket)
                     .stream()
-                    .map(d -> dishMapper.toApi(d))
+                    .map(d -> dishMapper.toApiGet(d))
                     .collect(Collectors.toList()));
 
             bucketApi.pizzas.addAll(pizzaRepository.findAllPizzasByBuckets(bucket)
@@ -80,8 +81,12 @@ public class BucketMapper {
         }
         Client client = api.clientId == null ? null : clientRepository.findOne(api.clientId);
         if (client == null) {
-            return null;
+            throw new BadRequestException("Bucket must have a minimum one dish or pizza!");
         }
+        if (api.dishesIds.isEmpty() && api.pizzasIds.isEmpty()) {
+            throw new BadRequestException("Bucket must be have a client creator id!");
+        }
+
         bucket.setAddress(api.address);
         bucket.setDate(api.date);
         bucket.setPrice(api.price);

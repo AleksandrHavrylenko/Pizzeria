@@ -52,8 +52,6 @@ public class IngredientController {
             Ingredient ing = ingredientService.addIngredient(ingredientMapper.fromApiPost(req));
             reply.ingredients.add(ingredientMapper.toApi(ing));
         } catch (Exception e) {
-            reply.code = -1;
-            reply.message = e.getMessage();
             log.warning("Error adding ingredient: " + e.getMessage());
             throw e;
         }

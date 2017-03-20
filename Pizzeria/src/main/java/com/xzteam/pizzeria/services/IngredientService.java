@@ -27,6 +27,11 @@ public class IngredientService {
         return ingredientRepository.save(ingredient);
     }
 
+    public Ingredient updateIngredient(Ingredient ingredient){
+        log.info(String.format("Updating ingredient %s with id %s", ingredient.getName(), ingredient.getId()));
+        return ingredientRepository.save(ingredient);
+    }
+
     public void deleteIngredient(Long id) {
         Ingredient ingredient = ingredientRepository.findOne(id);
         if (ingredient != null) {
@@ -34,5 +39,9 @@ public class IngredientService {
                     ingredient.getName(), ingredient.getId()));
             ingredientRepository.delete(ingredient);
         }
+    }
+
+    public boolean exists(Long id){
+        return ingredientRepository.exists(id);
     }
 }

@@ -28,6 +28,11 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
+    public Client updateClient(Client client){
+        log.info(String.format("Updating client %s with id %s", client.getFirstName(), client.getId()));
+        return clientRepository.save(client);
+    }
+
     public void deleteClient(Long id) {
         Client client = clientRepository.findOne(id);
         if (client != null) {
@@ -36,4 +41,7 @@ public class ClientService {
         }
     }
 
+    public boolean exists(Long id){
+        return clientRepository.exists(id);
+    }
 }

@@ -1,15 +1,16 @@
 package com.xzteam.pizzeria.rest;
 
-import com.xzteam.pizzeria.api.GenericReply;
 import com.xzteam.pizzeria.api.client.ClientApi;
 import com.xzteam.pizzeria.api.client.ClientApiReply;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.mappers.ClientMapper;
+import com.xzteam.pizzeria.rest.exceptions.NotFoundException;
 import com.xzteam.pizzeria.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -37,37 +38,59 @@ public class ClientController {
 			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ClientApiReply getClientById(@PathVariable Long id) {
 		ClientApiReply reply = new ClientApiReply();
-        reply.clients.add(clientMapper.toApi(clientService.getClientById(id)));
+		ClientApi api = clientMapper.toApi(clientService.getClientById(id));
+        reply.clients.add(api);
+		if (api == null) {
+			throw new NotFoundException("Client with id=" + id + " not found!");
+		}
         return reply;
 	}
 
-	@RequestMapping(path = "/clients/{id}", method = RequestMethod.DELETE,
-			produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public GenericReply delClient(@PathVariable Long id) {
-		GenericReply reply = new GenericReply();
-		try{
-			clientService.deleteClient(id);
-		}catch(Exception e){
-			reply.code = -1;
-			reply.message = e.getMessage();
-			log.warning("Error deleting client: " + e.getMessage());
+	@RequestMapping(path = "/clients", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ClientApiReply addClient(@Valid @RequestBody ClientApi req) {
+		ClientApiReply reply = new ClientApiReply();
+		try {
+			Client client = clientService.addClient(clientMapper.fromApiPost(req));
+			reply.clients.add(clientMapper.toApi(client));
+		} catch (Exception e) {
+			log.warning("Error adding client: " + e.getMessage());
+			throw e;
 		}
 		return reply;
 	}
 
-	@RequestMapping(path = "/clients", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public GenericReply addClient(@RequestBody ClientApi req) {
-        GenericReply rep = new GenericReply();
-        try {
-            Client client = clientService.addClient(clientMapper.fromApi(req));
-            rep.message = client.getId().toString();
-        } catch (Exception e) {
-			String msg = "Error adding client: " + e.getMessage();
-			rep.code = -1;
-            rep.message = msg;
-			log.warning(msg);
+	@RequestMapping(path = "/dishes/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ClientApiReply updateClient(@PathVariable Long id, @Valid @RequestBody ClientApi req) {
+		if (!clientService.exists(id)) {
+			String msg = "Client with id=" + id + " not found!";
+			log.warning("Error updating client: " + msg);
+			throw new NotFoundException(msg);
 		}
-        return rep;
-    }
+		ClientApiReply reply = new ClientApiReply();
+		try {
+			Client client = clientService.updateClient(clientMapper.fromApiPut(req, id));
+			reply.clients.add(clientMapper.toApi(client));
+		} catch (Exception e) {
+			log.warning("Error updating client : " + e.getMessage());
+			throw e;
+		}
+		return reply;
+	}
+
+	@RequestMapping(path = "/dishes/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public void deleteClient(@PathVariable Long id) {
+		if (!clientService.exists(id)) {
+			String msg = "Client with id=" + id + " not found!";
+			log.warning("Error deleting client: " + msg);
+			throw new NotFoundException(msg);
+		}
+		try {
+			clientService.deleteClient(id);
+		} catch (Exception e) {
+			log.warning("Error deleting client : " + e.getMessage());
+			throw e;
+		}
+	}
+
 }
 

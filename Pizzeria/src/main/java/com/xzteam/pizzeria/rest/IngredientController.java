@@ -1,6 +1,5 @@
 package com.xzteam.pizzeria.rest;
 
-import com.xzteam.pizzeria.api.GenericReply;
 import com.xzteam.pizzeria.api.ingredients.IngredientsApi;
 import com.xzteam.pizzeria.api.ingredients.IngredientsApiListReply;
 import com.xzteam.pizzeria.domain.Ingredient;
@@ -80,7 +79,7 @@ public class IngredientController {
     }
 
     @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void deleteDish(@PathVariable Long id) {
+    public void deleteIngredient(@PathVariable Long id) {
         if (!ingredientService.exists(id)) {
             String msg = "ingredient with id=" + id + " not found!";
             log.warning("Error deleting ingredient: " + msg);

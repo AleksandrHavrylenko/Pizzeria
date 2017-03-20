@@ -3,14 +3,17 @@ package com.xzteam.pizzeria.mappers;
 import com.xzteam.pizzeria.api.client.ClientApi;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.repository.ClientRepository;
+import com.xzteam.pizzeria.rest.exceptions.NotFoundException;
+import com.xzteam.pizzeria.services.ClientService;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ClientMapper {
-	@Autowired
-	ClientRepository clientRepository;
+
+    @Autowired
+    ClientService clientService;
 	
     public ClientApi toApi(Client client) {
     	ClientApi clientApi = null;
@@ -33,26 +36,33 @@ public class ClientMapper {
         Long id = 0L;
         while (!idOK) {
             id = EntityIdGenerator.random();
-            idOK = !clientRepository.exists(id);
+            idOK = !clientService.exists(id);
         }
         client.setId(id);
         return client;
     }
 
-    public Client fromApi(ClientApi api) {
-        Client client = null;
-        if (api.id != null) {
-            client = clientRepository.findOne(Long.parseLong(api.id));
-        }
-        if (client == null) {
-        	client = newClient();
-        }
+    private void updateFields(Client client, ClientApi api){
         client.setEmail(api.email);
         client.setFirstName(api.firstName);
         client.setLastName(api.lastName);
         client.setPassHash(api.passHash);
         client.setPhone(api.phone);
         client.setSpentMoney(api.spentMoney);
+    }
+
+    public Client fromApiPost(ClientApi api){
+        Client client = newClient();
+        updateFields(client, api);
+        return client;
+    }
+
+    public Client fromApiPut(ClientApi api, long id) throws NotFoundException{
+        Client client = clientService.getClientById(id);
+        if(client == null){
+            throw new NotFoundException();
+        }
+        updateFields(client, api);
         return client;
     }
 }

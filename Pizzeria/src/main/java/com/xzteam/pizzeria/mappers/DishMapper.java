@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class DishMapper {
 
     @Autowired
-    DishService dishService;
+    private DishService dishService;
 
     public DishApi toApiGet(Dish d) {
         DishApi api = null;

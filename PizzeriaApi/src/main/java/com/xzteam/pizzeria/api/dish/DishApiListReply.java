@@ -5,5 +5,5 @@ import java.util.List;
 
 
 public class DishApiListReply {
-    public List<DishApi> dishes = new ArrayList<>();
+    public final List<DishApi> dishes = new ArrayList<>();
 }

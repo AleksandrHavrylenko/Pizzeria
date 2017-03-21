@@ -5,5 +5,5 @@ import java.util.List;
 
 
 public class ClientApiReply {
-    public List<ClientApi> clients = new ArrayList<>();
+    public final List<ClientApi> clients = new ArrayList<>();
 }

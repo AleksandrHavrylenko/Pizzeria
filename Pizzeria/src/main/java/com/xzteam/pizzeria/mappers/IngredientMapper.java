@@ -2,7 +2,6 @@ package com.xzteam.pizzeria.mappers;
 
 import com.xzteam.pizzeria.api.ingredients.IngredientsApi;
 import com.xzteam.pizzeria.domain.Ingredient;
-import com.xzteam.pizzeria.repository.IngredientRepository;
 import com.xzteam.pizzeria.rest.exceptions.NotFoundException;
 import com.xzteam.pizzeria.services.IngredientService;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class IngredientMapper {
     @Autowired
-    IngredientService ingredientService;
+    private IngredientService ingredientService;
 
     public IngredientsApi toApi(Ingredient ingredient) {
         IngredientsApi api = null;

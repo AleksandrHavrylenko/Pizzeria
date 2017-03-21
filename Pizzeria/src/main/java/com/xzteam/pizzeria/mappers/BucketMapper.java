@@ -7,11 +7,12 @@ import com.xzteam.pizzeria.domain.Bucket;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.domain.Dish;
 import com.xzteam.pizzeria.domain.Pizza;
-import com.xzteam.pizzeria.repository.BucketRepository;
-import com.xzteam.pizzeria.repository.ClientRepository;
-import com.xzteam.pizzeria.repository.DishRepository;
-import com.xzteam.pizzeria.repository.PizzaRepository;
 import com.xzteam.pizzeria.rest.exceptions.BadRequestException;
+import com.xzteam.pizzeria.rest.exceptions.NotFoundException;
+import com.xzteam.pizzeria.services.BucketService;
+import com.xzteam.pizzeria.services.ClientService;
+import com.xzteam.pizzeria.services.DishService;
+import com.xzteam.pizzeria.services.PizzaService;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,19 +25,19 @@ import java.util.stream.Collectors;
 public class BucketMapper {
 
     @Autowired
-    BucketRepository bucketRepository;
+    private BucketService bucketService;
     @Autowired
-    DishRepository dishRepository;
+    private DishService dishService;
     @Autowired
-    PizzaRepository pizzaRepository;
+    private PizzaService pizzaService;
     @Autowired
-    DishMapper dishMapper;
+    private ClientService clientService;
     @Autowired
-    PizzaMapper pizzaMapper;
+    private DishMapper dishMapper;
     @Autowired
-    ClientRepository clientRepository;
+    private PizzaMapper pizzaMapper;
 
-    public BucketApi toApi(Bucket bucket) {
+    public BucketApi toApiGet(Bucket bucket) {
         BucketApiInfo bucketApi = null;
         if (bucket != null) {
             bucketApi = new BucketApiInfo();
@@ -46,14 +47,14 @@ public class BucketMapper {
             bucketApi.date = bucket.getDate();
             bucketApi.status = bucket.getStatus();
 
-            bucketApi.dishes.addAll(dishRepository.findAllDishesByBuckets(bucket)
+            bucketApi.dishes.addAll(dishService.getAllDishesInBucket(bucket)
                     .stream()
                     .map(d -> dishMapper.toApiGet(d))
                     .collect(Collectors.toList()));
 
-            bucketApi.pizzas.addAll(pizzaRepository.findAllPizzasByBuckets(bucket)
+            bucketApi.pizzas.addAll(pizzaService.getAllPizzasInBucket(bucket)
                     .stream()
-                    .map(p -> pizzaMapper.toApi(p))
+                    .map(p -> pizzaMapper.toApiGet(p))
                     .collect(Collectors.toList()));
         }
         return bucketApi;
@@ -65,21 +66,14 @@ public class BucketMapper {
         Long id = 0L;
         while (!idOK) {
             id = EntityIdGenerator.random();
-            idOK = !bucketRepository.exists(id);
+            idOK = !bucketService.exists(id);
         }
         bucket.setId(id);
         return bucket;
     }
 
-    public Bucket fromApi(BucketApiAddRequest api) {
-        Bucket bucket = null;
-        if (api.id != null) {
-            bucket = bucketRepository.findOne(Long.parseLong(api.id));
-        }
-        if (bucket == null) {
-            bucket = newBucket();
-        }
-        Client client = api.clientId == null ? null : clientRepository.findOne(api.clientId);
+    private void updateFields(Bucket bucket, BucketApiAddRequest api) {
+        Client client = api.clientId == null ? null : clientService.getClientById(api.clientId);
         if (client == null) {
             throw new BadRequestException("Bucket must have a minimum one dish or pizza!");
         }
@@ -93,15 +87,29 @@ public class BucketMapper {
         bucket.setClient(client);
 
         List<Dish> dishes = api.dishesIds.stream()
-                .map(id -> dishRepository.findOne(id))
+                .map(id -> dishService.getDishById(id))
                 .collect(Collectors.toList());
         bucket.setDishes(dishes);
 
         List<Pizza> pizzas = api.pizzasIds.stream()
-                .map(id -> pizzaRepository.findOne(id))
+                .map(id -> pizzaService.getPizzaById(id))
                 .collect(Collectors.toList());
         bucket.setPizzas(pizzas);
+    }
 
+    public Bucket fromApiPost(BucketApiAddRequest api) {
+        Bucket bucket = newBucket();
+        updateFields(bucket, api);
         return bucket;
     }
+
+    public Bucket fromApiPut(BucketApiAddRequest api, long id) throws NotFoundException {
+        Bucket bucket = bucketService.getBucketById(id);
+        if (bucket == null) {
+            throw new NotFoundException();
+        }
+        updateFields(bucket, api);
+        return bucket;
+    }
+
 }

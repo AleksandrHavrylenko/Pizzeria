@@ -6,8 +6,8 @@ import java.util.List;
 
 public class BucketApiAddRequest extends BucketApi {
 
+    public final List<Long> dishesIds = new ArrayList<>();
+    public final List<Long> pizzasIds = new ArrayList<>();
     @NotNull
     public Long clientId;
-    public List<Long> dishesIds = new ArrayList<>();
-    public List<Long> pizzasIds = new ArrayList<>();
 }

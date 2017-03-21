@@ -5,10 +5,11 @@ import com.xzteam.pizzeria.api.pizza.PizzaApiInfo;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.domain.Ingredient;
 import com.xzteam.pizzeria.domain.Pizza;
-import com.xzteam.pizzeria.repository.ClientRepository;
-import com.xzteam.pizzeria.repository.IngredientRepository;
-import com.xzteam.pizzeria.repository.PizzaRepository;
 import com.xzteam.pizzeria.rest.exceptions.BadRequestException;
+import com.xzteam.pizzeria.rest.exceptions.NotFoundException;
+import com.xzteam.pizzeria.services.ClientService;
+import com.xzteam.pizzeria.services.IngredientService;
+import com.xzteam.pizzeria.services.PizzaService;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,23 +21,22 @@ import java.util.stream.Collectors;
 public class PizzaMapper {
 
     @Autowired
-    PizzaRepository pizzaRepository;
+    private PizzaService pizzaService;
     @Autowired
-    IngredientRepository ingredientRepository;
+    private IngredientService ingredientService;
     @Autowired
-    IngredientMapper ingredientMapper;
+    private ClientService clientService;
     @Autowired
-    ClientRepository clientRepository;
+    private IngredientMapper ingredientMapper;
 
-
-    public PizzaApiInfo toApi(Pizza p) {
+    public PizzaApiInfo toApiGet(Pizza p) {
         PizzaApiInfo api = null;
         if (p != null) {
             api = new PizzaApiInfo();
             api.id = p.getId().toString();
             api.name = p.getName();
-            api.ingredients.addAll(ingredientRepository
-                    .findAllIngredientsByPizzas(p)
+            api.ingredients.addAll(ingredientService
+                    .getAllIngredientsByPizza(p)
                     .stream()
                     .map(i -> ingredientMapper.toApi(i))
                     .collect(Collectors.toList()));
@@ -52,21 +52,13 @@ public class PizzaMapper {
         Long id = 0L;
         while (!idOK) {
             id = EntityIdGenerator.random();
-            idOK = !pizzaRepository.exists(id);
+            idOK = !pizzaService.exists(id);
         }
         pizza.setId(id);
         return pizza;
     }
 
-    public Pizza fromApi(PizzaApiAddRequest api) {
-        Pizza pizza = null;
-        if (api.id != null) {
-            pizza = pizzaRepository.findOne(Long.parseLong(api.id));
-        }
-        if (pizza == null) {
-            pizza = newPizza();
-        }
-
+    private void updateFields(Pizza pizza, PizzaApiAddRequest api) {
         //TODO: Create property
         Long defaultIngredientId = 1000L;
 
@@ -75,16 +67,31 @@ public class PizzaMapper {
         }
 
         pizza.setName(api.name);
-        Client client = api.clientId == null ? null : clientRepository.findOne(api.clientId);
+        Client client = api.clientId == null ? null : clientService.getClientById(api.clientId);
         if (client == null) {
             throw new BadRequestException("Pizza must be have a client creator id!");
         }
         pizza.setClient(client);
 
         List<Ingredient> ingredients = api.ingredientsIds.stream()
-                .map(id -> ingredientRepository.findOne(id))
+                .map(id -> ingredientService.getIngredientById(id))
                 .collect(Collectors.toList());
         pizza.setIngredients(ingredients);
+    }
+
+    public Pizza fromApiPost(PizzaApiAddRequest api) {
+        Pizza pizza = newPizza();
+        updateFields(pizza, api);
         return pizza;
     }
+
+    public Pizza fromApiPut(PizzaApiAddRequest api, long id) throws NotFoundException {
+        Pizza dish = pizzaService.getPizzaById(id);
+        if (dish == null) {
+            throw new NotFoundException();
+        }
+        updateFields(dish, api);
+        return dish;
+    }
+
 }

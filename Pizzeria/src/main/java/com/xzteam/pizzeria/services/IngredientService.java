@@ -1,6 +1,7 @@
 package com.xzteam.pizzeria.services;
 
 import com.xzteam.pizzeria.domain.Ingredient;
+import com.xzteam.pizzeria.domain.Pizza;
 import com.xzteam.pizzeria.repository.IngredientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.logging.Logger;
 public class IngredientService {
     private static final Logger log = Logger.getLogger(IngredientService.class.getName());
     @Autowired
-    IngredientRepository ingredientRepository;
+    private IngredientRepository ingredientRepository;
 
     public List<Ingredient> getAll() {
         return ingredientRepository.findAll();
@@ -27,7 +28,7 @@ public class IngredientService {
         return ingredientRepository.save(ingredient);
     }
 
-    public Ingredient updateIngredient(Ingredient ingredient){
+    public Ingredient updateIngredient(Ingredient ingredient) {
         log.info(String.format("Updating ingredient %s with id %s", ingredient.getName(), ingredient.getId()));
         return ingredientRepository.save(ingredient);
     }
@@ -41,7 +42,11 @@ public class IngredientService {
         }
     }
 
-    public boolean exists(Long id){
+    public List<Ingredient> getAllIngredientsByPizza(Pizza pizza) {
+        return ingredientRepository.findAllIngredientsByPizzas(pizza);
+    }
+
+    public boolean exists(Long id) {
         return ingredientRepository.exists(id);
     }
 }

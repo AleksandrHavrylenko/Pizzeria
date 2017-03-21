@@ -1,5 +1,6 @@
 package com.xzteam.pizzeria.services;
 
+import com.xzteam.pizzeria.domain.Bucket;
 import com.xzteam.pizzeria.domain.Dish;
 import com.xzteam.pizzeria.repository.DishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ public class DishService {
     private static final Logger log = Logger.getLogger(DishService.class.getName());
 
     @Autowired
-    DishRepository dishRepository;
+    private DishRepository dishRepository;
 
     public List<Dish> getAll() {
         return dishRepository.findAll();
@@ -39,6 +40,10 @@ public class DishService {
             log.info(String.format("Deleting dish %s with id %s", dish.getName(), dish.getId()));
             dishRepository.delete(dish);
         }
+    }
+
+    public List<Dish> getAllDishesInBucket(Bucket bucket) {
+        return dishRepository.findAllDishesByBuckets(bucket);
     }
 
     public boolean exists(Long id) {

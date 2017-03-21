@@ -13,7 +13,7 @@ public class ClientService {
     private static final Logger log = Logger.getLogger(ClientService.class.getName());
 
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     public List<Client> getAll() {
         return clientRepository.findAll();

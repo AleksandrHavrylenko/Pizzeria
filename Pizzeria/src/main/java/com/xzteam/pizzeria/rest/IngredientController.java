@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 
 @RestController
 public class IngredientController {
-
     private static final Logger log = Logger.getLogger(IngredientController.class.getName());
 
     @Autowired
-    IngredientService ingredientService;
+    private IngredientService ingredientService;
     @Autowired
-    IngredientMapper ingredientMapper;
+    private IngredientMapper ingredientMapper;
 
-    @RequestMapping(path = "/ingredients", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public IngredientsApiListReply getAllIngredients() {
         IngredientsApiListReply listReply = new IngredientsApiListReply();
         listReply.ingredients.addAll(ingredientService.getAll()
@@ -34,18 +34,20 @@ public class IngredientController {
         return listReply;
     }
 
-    @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public IngredientsApiListReply getIngredientById(@PathVariable Long id) {
-        IngredientsApiListReply reply = new IngredientsApiListReply();
         IngredientsApi api = ingredientMapper.toApi(ingredientService.getIngredientById(id));
-        reply.ingredients.add(api);
         if (api == null) {
             throw new NotFoundException("Ingredient with id=" + id + " not found!");
         }
+        IngredientsApiListReply reply = new IngredientsApiListReply();
+        reply.ingredients.add(api);
         return reply;
     }
 
-    @RequestMapping(path = "/ingredients", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public IngredientsApiListReply addIngredient(@Valid @RequestBody IngredientsApi req) {
         IngredientsApiListReply reply = new IngredientsApiListReply();
         try {
@@ -58,7 +60,8 @@ public class IngredientController {
         return reply;
     }
 
-    @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.PUT,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public IngredientsApiListReply updateIngredient(@PathVariable Long id, @Valid @RequestBody IngredientsApi req) {
         if (!ingredientService.exists(id)) {
             String msg = "ingredients with id=" + id + " not found!";
@@ -67,8 +70,8 @@ public class IngredientController {
         }
         IngredientsApiListReply reply = new IngredientsApiListReply();
         try {
-            Ingredient dish = ingredientService.updateIngredient(ingredientMapper.fromApiPut(req, id));
-            reply.ingredients.add(ingredientMapper.toApi(dish));
+            Ingredient ingredient = ingredientService.updateIngredient(ingredientMapper.fromApiPut(req, id));
+            reply.ingredients.add(ingredientMapper.toApi(ingredient));
         } catch (Exception e) {
             log.warning("Error updating ingredient : " + e.getMessage());
             throw e;
@@ -76,7 +79,8 @@ public class IngredientController {
         return reply;
     }
 
-    @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(path = "/ingredients/{id}", method = RequestMethod.DELETE,
+            produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public void deleteIngredient(@PathVariable Long id) {
         if (!ingredientService.exists(id)) {
             String msg = "ingredient with id=" + id + " not found!";
@@ -90,4 +94,5 @@ public class IngredientController {
             throw e;
         }
     }
+
 }

@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 public class BucketService {
     private static final Logger log = Logger.getLogger(BucketService.class.getName());
     @Autowired
-    BucketRepository bucketRepository;
+    private BucketRepository bucketRepository;
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     public Bucket getBucketById(Long id) {
         return bucketRepository.findOne(id);
@@ -37,11 +37,20 @@ public class BucketService {
         return bucketRepository.save(bucket);
     }
 
+    public Bucket updateBucket(Bucket bucket) {
+        log.info("Updating bucket with id %s" + bucket.getId());
+        return bucketRepository.save(bucket);
+    }
+
     public void deleteBucket(Long id) {
         Bucket bucket = bucketRepository.findOne(id);
         if (bucket != null) {
             log.info("Deleting bucket with id %s" + bucket.getId());
             bucketRepository.delete(bucket);
         }
+    }
+
+    public boolean exists(Long id) {
+        return bucketRepository.exists(id);
     }
 }

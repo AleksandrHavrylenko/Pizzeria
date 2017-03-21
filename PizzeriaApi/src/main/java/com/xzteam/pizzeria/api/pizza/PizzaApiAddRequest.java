@@ -8,9 +8,8 @@ import java.util.List;
 public class PizzaApiAddRequest extends PizzaApi {
 
     @NotNull
-    public Long clientId;
-
+    public final List<Long> ingredientsIds = new ArrayList<>();
     @NotNull
-    public List<Long> ingredientsIds = new ArrayList<>();
+    public Long clientId;
 
 }

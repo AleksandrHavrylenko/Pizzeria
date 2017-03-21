@@ -2,7 +2,6 @@ package com.xzteam.pizzeria.mappers;
 
 import com.xzteam.pizzeria.api.client.ClientApi;
 import com.xzteam.pizzeria.domain.Client;
-import com.xzteam.pizzeria.repository.ClientRepository;
 import com.xzteam.pizzeria.rest.exceptions.NotFoundException;
 import com.xzteam.pizzeria.services.ClientService;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
@@ -13,8 +12,8 @@ import org.springframework.stereotype.Component;
 public class ClientMapper {
 
     @Autowired
-    ClientService clientService;
-	
+    private ClientService clientService;
+
     public ClientApi toApi(Client client) {
     	ClientApi clientApi = null;
     	if(client != null) {

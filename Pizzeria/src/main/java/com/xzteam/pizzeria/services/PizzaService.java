@@ -1,5 +1,6 @@
 package com.xzteam.pizzeria.services;
 
+import com.xzteam.pizzeria.domain.Bucket;
 import com.xzteam.pizzeria.domain.Client;
 import com.xzteam.pizzeria.domain.Pizza;
 import com.xzteam.pizzeria.repository.ClientRepository;
@@ -14,10 +15,11 @@ import java.util.logging.Logger;
 @Service
 public class PizzaService {
     private static final Logger log = Logger.getLogger(PizzaService.class.getName());
+
     @Autowired
-    PizzaRepository pizzaRepository;
+    private PizzaRepository pizzaRepository;
     @Autowired
-    ClientRepository clientRepository;
+    private ClientRepository clientRepository;
 
     public List<Pizza> getAll() {
         return pizzaRepository.findAll();
@@ -29,6 +31,11 @@ public class PizzaService {
 
     public Pizza addPizza(Pizza pizza) {
         log.info("Adding pizza with id %s" + pizza.getId());
+        return pizzaRepository.save(pizza);
+    }
+
+    public Pizza updatePizza(Pizza pizza) {
+        log.info("Updating pizza with id %s" + pizza.getId());
         return pizzaRepository.save(pizza);
     }
 
@@ -45,4 +52,11 @@ public class PizzaService {
         return client == null ? Collections.EMPTY_LIST : pizzaRepository.findAllPizzasByClient(client);
     }
 
+    public List<Pizza> getAllPizzasInBucket(Bucket bucket) {
+        return pizzaRepository.findAllPizzasByBuckets(bucket);
+    }
+
+    public boolean exists(Long id) {
+        return clientRepository.exists(id);
+    }
 }

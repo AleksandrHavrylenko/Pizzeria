@@ -5,6 +5,8 @@ import com.xzteam.pizzeria.domain.Dish;
 import com.xzteam.pizzeria.repository.DishRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,6 +18,7 @@ public class DishService {
     @Autowired
     private DishRepository dishRepository;
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public List<Dish> getAll() {
         return dishRepository.findAll();
     }

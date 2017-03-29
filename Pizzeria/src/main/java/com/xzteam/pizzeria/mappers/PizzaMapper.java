@@ -12,6 +12,7 @@ import com.xzteam.pizzeria.services.IngredientService;
 import com.xzteam.pizzeria.services.PizzaService;
 import com.xzteam.pizzeria.utils.EntityIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,6 +29,8 @@ public class PizzaMapper {
     private ClientService clientService;
     @Autowired
     private IngredientMapper ingredientMapper;
+    @Value("${myserver.default-id}")
+    private long defaultIngredientId;
 
     public PizzaApiInfo toApiGet(Pizza p) {
         PizzaApiInfo api = null;
@@ -59,13 +62,9 @@ public class PizzaMapper {
     }
 
     private void updateFields(Pizza pizza, PizzaApiAddRequest api) {
-        //TODO: Create property
-        Long defaultIngredientId = 1000L;
-
         if (!api.ingredientsIds.contains(defaultIngredientId)) {
             throw new BadRequestException("Pizza must be have a one default ingredient!");
         }
-
         pizza.setName(api.name);
         Client client = api.clientId == null ? null : clientService.getClientById(api.clientId);
         if (client == null) {

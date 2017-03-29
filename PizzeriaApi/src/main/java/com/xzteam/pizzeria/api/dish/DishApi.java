@@ -27,5 +27,4 @@ public class DishApi {
     @NotNull
     @Min(0)
     public Integer weight;
-    public String imageUrl;
 }

@@ -20,8 +20,4 @@ public class IngredientsApi {
     @Min(0)
     public Integer weight;
 
-    @NotNull
-    @Size(min = 1, max = 255)
-    public String imageUrl;
-
 }

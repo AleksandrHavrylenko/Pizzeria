@@ -25,7 +25,6 @@ public class DishMapper {
             api.price = d.getPrice();
             api.weight = d.getWeight();
             api.type = d.getType().toString();
-            api.imageUrl = d.getImageUrl();
         }
         return api;
     }
@@ -47,7 +46,6 @@ public class DishMapper {
         dish.setDescription(api.description);
         dish.setPrice(api.price);
         dish.setWeight(api.weight);
-        dish.setImageUrl(api.imageUrl);
         dish.setType(DishType.valueOf(api.type));
     }
 

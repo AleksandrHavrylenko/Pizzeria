@@ -27,9 +27,6 @@ public class Client {
     @Column(name = "phone", length = 11, unique = true)
     private String phone;
 
-    @Column(name = "spent_money")
-    private Float spentMoney;
-
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Bucket> buckets;
 
@@ -87,14 +84,6 @@ public class Client {
         this.phone = phone;
     }
 
-    public Float getSpentMoney() {
-        return spentMoney;
-    }
-
-    public void setSpentMoney(Float spentMoney) {
-        this.spentMoney = spentMoney;
-    }
-
     public List<Bucket> getBuckets() {
         return buckets;
     }
@@ -112,7 +101,6 @@ public class Client {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
-                ", spentMoney=" + spentMoney +
                 '}';
     }
 }

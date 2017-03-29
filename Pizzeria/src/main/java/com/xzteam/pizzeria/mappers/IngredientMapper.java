@@ -21,7 +21,6 @@ public class IngredientMapper {
             api.name = ingredient.getName();
             api.price = ingredient.getPrice();
             api.weight = ingredient.getWeight();
-            api.imageUrl = ingredient.getImageUrl();
         }
         return api;
     }
@@ -39,7 +38,6 @@ public class IngredientMapper {
     }
 
     private void updateFields(Ingredient ingredient, IngredientsApi api){
-        ingredient.setImageUrl(api.imageUrl);
         ingredient.setName(api.name);
         ingredient.setPrice(api.price);
         ingredient.setWeight(api.weight);

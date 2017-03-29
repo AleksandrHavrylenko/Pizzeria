@@ -24,7 +24,6 @@ public class ClientMapper {
     		clientApi.firstName = client.getFirstName();
     		clientApi.lastName = client.getLastName();
     		clientApi.phone = client.getPhone();
-    		clientApi.spentMoney = client.getSpentMoney();
     	}
     	return clientApi;
     }
@@ -47,7 +46,6 @@ public class ClientMapper {
         client.setLastName(api.lastName);
         client.setPassHash(api.passHash);
         client.setPhone(api.phone);
-        client.setSpentMoney(api.spentMoney);
     }
 
     public Client fromApiPost(ClientApi api){

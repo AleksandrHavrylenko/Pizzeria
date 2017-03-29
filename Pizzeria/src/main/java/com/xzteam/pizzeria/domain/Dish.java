@@ -30,9 +30,6 @@ public class Dish {
     @Column(name = "weight", nullable = false)
     private Integer weight;
 
-    @Column(name = "image_url")
-    private String imageUrl;
-
     @ManyToMany(mappedBy = "dishes")
     private List<Bucket> buckets;
 
@@ -87,14 +84,6 @@ public class Dish {
         this.weight = weight;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     @Override
     public String toString() {
         return "Dish{" +
@@ -104,7 +93,6 @@ public class Dish {
                 ", type=" + type +
                 ", price=" + price +
                 ", weight=" + weight +
-                ", imageUrl='" + imageUrl + '\'' +
                 '}';
     }
 }

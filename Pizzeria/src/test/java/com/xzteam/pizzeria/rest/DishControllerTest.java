@@ -39,7 +39,6 @@ public class DishControllerTest {
         d.price = 100.0f;
         d.weight = 200;
         d.type = DishType.SECOND_DISH.toString();
-        d.imageUrl = "http://test.com";
 
         ObjectMapper om = new ObjectMapper();
         String content = om.writeValueAsString(d);
@@ -82,7 +81,6 @@ public class DishControllerTest {
         d.price = 100.0f;
         d.weight = 200;
         d.type = DishType.SECOND_DISH.toString();
-        d.imageUrl = "http://test.com";
 
         ObjectMapper om = new ObjectMapper();
         String content = om.writeValueAsString(d);

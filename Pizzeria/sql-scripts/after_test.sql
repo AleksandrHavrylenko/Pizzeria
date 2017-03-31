@@ -1,0 +1,1 @@
+DELETE FROM `dish` WHERE `dish_id` BETWEEN -100 AND 0;

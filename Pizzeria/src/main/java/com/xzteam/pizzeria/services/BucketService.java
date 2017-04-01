@@ -33,19 +33,19 @@ public class BucketService {
     }
 
     public Bucket addBucket(Bucket bucket) {
-        log.info("Adding bucket with id %s" + bucket.getId());
+        log.info("Adding bucket with id " + bucket.getId());
         return bucketRepository.save(bucket);
     }
 
     public Bucket updateBucket(Bucket bucket) {
-        log.info("Updating bucket with id %s" + bucket.getId());
+        log.info("Updating bucket with id " + bucket.getId());
         return bucketRepository.save(bucket);
     }
 
     public void deleteBucket(Long id) {
         Bucket bucket = bucketRepository.findOne(id);
         if (bucket != null) {
-            log.info("Deleting bucket with id %s" + bucket.getId());
+            log.info("Deleting bucket with id " + bucket.getId());
             bucketRepository.delete(bucket);
         }
     }

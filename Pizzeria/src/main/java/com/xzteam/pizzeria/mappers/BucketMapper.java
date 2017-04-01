@@ -3,10 +3,7 @@ package com.xzteam.pizzeria.mappers;
 import com.xzteam.pizzeria.api.bucket.BucketApi;
 import com.xzteam.pizzeria.api.bucket.BucketApiAddRequest;
 import com.xzteam.pizzeria.api.bucket.BucketApiInfo;
-import com.xzteam.pizzeria.domain.Bucket;
-import com.xzteam.pizzeria.domain.Client;
-import com.xzteam.pizzeria.domain.Dish;
-import com.xzteam.pizzeria.domain.Pizza;
+import com.xzteam.pizzeria.domain.*;
 import com.xzteam.pizzeria.rest.exceptions.BadRequestException;
 import com.xzteam.pizzeria.rest.exceptions.NotFoundException;
 import com.xzteam.pizzeria.services.BucketService;
@@ -17,6 +14,7 @@ import com.xzteam.pizzeria.utils.EntityIdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,9 +80,9 @@ public class BucketMapper {
         }
 
         bucket.setAddress(api.address);
-        bucket.setDate(api.date);
-        bucket.setPrice(api.price);
+        bucket.setDate(Calendar.getInstance());
         bucket.setClient(client);
+        bucket.setStatus(api.status);
 
         List<Dish> dishes = api.dishesIds.stream()
                 .map(id -> dishService.getDishById(id))
@@ -95,6 +93,13 @@ public class BucketMapper {
                 .map(id -> pizzaService.getPizzaById(id))
                 .collect(Collectors.toList());
         bucket.setPizzas(pizzas);
+
+        double dishesPrice = dishes.stream().mapToDouble(Dish::getPrice).sum();
+        double pizzasPrice = 0;
+        for (Pizza pizza : pizzas) {
+            pizzasPrice += pizza.getIngredients().stream().mapToDouble(Ingredient::getPrice).sum();
+        }
+        bucket.setPrice((float) (dishesPrice + pizzasPrice));
     }
 
     public Bucket fromApiPost(BucketApiAddRequest api) {

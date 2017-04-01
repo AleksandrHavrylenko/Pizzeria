@@ -30,19 +30,19 @@ public class PizzaService {
     }
 
     public Pizza addPizza(Pizza pizza) {
-        log.info("Adding pizza with id %s" + pizza.getId());
+        log.info("Adding pizza with id " + pizza.getId());
         return pizzaRepository.save(pizza);
     }
 
     public Pizza updatePizza(Pizza pizza) {
-        log.info("Updating pizza with id %s" + pizza.getId());
+        log.info("Updating pizza with id " + pizza.getId());
         return pizzaRepository.save(pizza);
     }
 
     public void deletePizza(Long id) {
         Pizza pizza = pizzaRepository.findOne(id);
         if (pizza != null) {
-            log.info("Deleting pizza with id %s" + pizza.getId());
+            log.info("Deleting pizza with id " + pizza.getId());
             pizzaRepository.delete(pizza);
         }
     }

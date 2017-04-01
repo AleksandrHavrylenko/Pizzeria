@@ -1,29 +1,16 @@
 package com.xzteam.pizzeria.services;
 
 import com.xzteam.pizzeria.Helper;
-import com.xzteam.pizzeria.api.dish.DishApi;
 import com.xzteam.pizzeria.domain.Dish;
 import com.xzteam.pizzeria.domain.enums.DishType;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.annotation.Order;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.AFTER_TEST_METHOD;
-import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TEST_METHOD;
-import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
-
-/**
- * Created by qwerty on 31.03.2017.
- */
-//@Sql({"before_test.sql", "after_test.sql"})
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment =
         SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -32,17 +19,14 @@ public class DishServiceTest {
     @Autowired
     private DishService dishService;
 
-    //@Order()
-    //@Sql("file:C:/Users/qwerty/pizzeria/Pizzeria/sql-scripts/before_test.sql")
     @BeforeClass
     public static void before(){
-        Helper.executeSql("C:/Users/qwerty/pizzeria/Pizzeria/sql-scripts/before_test.sql");
+        Helper.executeSql("before_test.sql");
     }
 
-    //@Sql("file:C:/Users/qwerty/pizzeria/Pizzeria/sql-scripts/after_test.sql")
     @AfterClass
     public static void after(){
-        Helper.executeSql("C:/Users/qwerty/pizzeria/Pizzeria/sql-scripts/after_test.sql");
+        Helper.executeSql("after_test.sql");
     }
 
     @Test
@@ -56,6 +40,11 @@ public class DishServiceTest {
     public void getDishById() throws Exception {
         Dish dish = dishService.getDishById(-1L);
         Assert.assertNotNull(dish);
+        Assert.assertEquals(dish.getType(), DishType.DRINK);
+        Assert.assertEquals(dish.getName(), "Тестовое блюдо 1");
+        Assert.assertEquals(Long.valueOf(dish.getWeight()), Long.valueOf(500));
+        Assert.assertEquals(Float.valueOf(dish.getPrice()), Float.valueOf(21));
+        Assert.assertEquals(dish.getDescription(), "Описание 1");
     }
 
     @Test
@@ -76,7 +65,6 @@ public class DishServiceTest {
         Assert.assertEquals(d.getPrice(), dish.getPrice());
         Assert.assertEquals(d.getWeight(), dish.getWeight());
         Assert.assertEquals(d.getType(), dish.getType());
-        //dishService.deleteDish(d.getId());
     }
 
     @Test
@@ -119,7 +107,9 @@ public class DishServiceTest {
     public void exists() throws Exception {
         Dish dish = dishService.getDishById(-1L);
         boolean b = dishService.exists(dish.getId());
+        boolean n = dishService.exists(-50L);
         Assert.assertTrue(b);
+        Assert.assertFalse(n);
     }
 
 }

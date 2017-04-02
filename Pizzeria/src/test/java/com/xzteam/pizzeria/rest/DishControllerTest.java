@@ -1,12 +1,11 @@
 package com.xzteam.pizzeria.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.xzteam.pizzeria.Helper;
 import com.xzteam.pizzeria.api.dish.DishApi;
 import com.xzteam.pizzeria.api.dish.DishApiListReply;
 import com.xzteam.pizzeria.domain.enums.DishType;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -31,6 +30,16 @@ public class DishControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @BeforeClass
+    public static void before(){
+        Helper.executeSql("before_test.sql");
+    }
+
+    @AfterClass
+    public static void after(){
+        Helper.executeSql("after_test.sql");
+    }
+
     @Test
     public void addDish() throws Exception {
         DishApi d = new DishApi();
@@ -39,11 +48,12 @@ public class DishControllerTest {
         d.price = 100.0f;
         d.weight = 200;
         d.type = DishType.SECOND_DISH.toString();
+        d.id = String.valueOf(-6L);
 
         ObjectMapper om = new ObjectMapper();
         String content = om.writeValueAsString(d);
 
-        MvcResult result = mockMvc.perform(post("/dishes/add")
+        MvcResult result = mockMvc.perform(post("/dishes")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(content)
@@ -65,7 +75,7 @@ public class DishControllerTest {
 
         //if (gr.code == 0) {
         long id = Long.parseLong(replyDish.id);
-            mockMvc.perform(delete("/dishes/del/" + id)
+            mockMvc.perform(delete("/dishes/" + id)
                     .accept(MediaType.APPLICATION_JSON_UTF8)
             )
                     .andExpect(status().isOk());
@@ -81,11 +91,12 @@ public class DishControllerTest {
         d.price = 100.0f;
         d.weight = 200;
         d.type = DishType.SECOND_DISH.toString();
+        d.id = String.valueOf(-7L);
 
         ObjectMapper om = new ObjectMapper();
         String content = om.writeValueAsString(d);
 
-        MvcResult result = mockMvc.perform(post("/dishes/add")
+        MvcResult result = mockMvc.perform(post("/dishes")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(content)
@@ -116,7 +127,7 @@ public class DishControllerTest {
         ObjectMapper om1 = new ObjectMapper();
         String content1 = om.writeValueAsString(d);
 
-        MvcResult result1 = mockMvc.perform(put("/dishes/update")
+        MvcResult result1 = mockMvc.perform(put("/dishes/" + newId)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(content1)
@@ -137,7 +148,7 @@ public class DishControllerTest {
         assertEquals(d.weight, replyDish.weight);
         assertEquals(d.type, replyDish.type);
 
-
+        this.mockMvc.perform(delete("/dishes/" + newId)).andDo(print()).andExpect(status().isOk());
 //        if (gr1.code == 0) {
 //            long id = Long.parseLong(replyDish.id);
 //            mockMvc.perform(delete("/dishes/del/" + id)
@@ -148,23 +159,22 @@ public class DishControllerTest {
     }
 
     @Test
-    @Ignore
     public void getDishById() throws Exception {
-        this.mockMvc.perform(get("/dishes/byid/1"))
+        this.mockMvc.perform(get("/dishes/-1"))
                 .andDo(print()).andExpect(status().isOk())
-                .andExpect(content().string(containsString("TestDescription")));
+                .andExpect(content().string(containsString("Описание 1")));
     }
 
     @Test
-    @Ignore
     public void getAllDishes() throws Exception {
-
+        this.mockMvc.perform(get("/dishes"))
+                .andDo(print()).andExpect(status().isOk());
     }
 
 
     @Test
     public void delDish() throws Exception {
-        this.mockMvc.perform(delete("/dishes/del/1")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(delete("/dishes/-1")).andDo(print()).andExpect(status().isOk());
     }
 
 }
